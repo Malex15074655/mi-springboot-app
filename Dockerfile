@@ -1,9 +1,11 @@
-FROM eclipse-temurin:17-jdk AS build
-WORKDIR /app
-COPY . .
-RUN ./mvnw package -DskipTests
+# Usa una imagen base con OpenJDK
+FROM openjdk:17-jdk-alpine
 
-FROM eclipse-temurin:21-jre
-WORKDIR /app
-COPY --from=build /app/target/*.jar app.jar
-CMD ["java", "-jar", "app.jar"]
+# Copia el archivo .jar de tu aplicación al contenedor
+COPY target/tu-aplicacion.jar app.jar
+
+# Expone el puerto que utilizará tu aplicación
+EXPOSE 8080
+
+# Comando para ejecutar tu aplicación
+ENTRYPOINT ["java", "-jar", "/app.jar"]
